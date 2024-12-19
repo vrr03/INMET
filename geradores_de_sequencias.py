@@ -2,8 +2,6 @@
 import math
 # Importa sys: 
 import sys
-# Importa medidas_de_posicao como mpos:
-import medidas_de_posicao as mpos
 
 # Função que retorna uma lista dos números primos
 # naturais até o módulo de um dado número inteiro.
@@ -102,6 +100,25 @@ def divisores(numero):
     # Retorna dupla de quantidade de divisores e a lista dos divisores ordenada:
     return (qtd, div)
 
+# numero: número natural a ser decomposto;
+def decomposicao_em_dupla_de_fatores_mais_proximos(numero):
+    # Calcula os divisores de um número:
+    n, X = divisores(numero)
+    # Se o número de divisores for zero (o número decomposto é o zero):
+    if not n:
+        # Retorna lista vazia:
+        return X
+    # Se número de observações for ímpar:
+    if n%2:
+        # Retorna dupla do divisor central:
+        return [X[int(n/2)], X[int(n/2)]]
+        # Se o tipo de ajuste for à direita:
+    # Senão:
+    else:
+        # Retorna dupla central:
+        return [X[int(n/2)-1], X[int(n/2)]]
+
+
 # lista: lista de elementos.
 def imprime_lista(lista):
     # Abre a lista:
@@ -116,50 +133,6 @@ def imprime_lista(lista):
 # numero = int(input("Digite o número a ser descrito por seus divisores: "))
 # qtd, div = divisores(numero)
 # imprime_lista(div)
-# moda = mpos.moda(qtd, div)
-# imprime_lista(moda)
-# mediana = mpos.mediana(qtd, div)
-# print(mediana)
-# dupla_central = mpos.dupla_central(qtd, div)
-# imprime_lista(dupla_central)
 
-# numero: número natural a ser decomposto;
-# t: tipo de ajuste de dupla para número de divisores ímpar. 
-def decomposicao_em_dupla_de_fatores_mais_proximos(numero, t='e'):
-    # Calcula os divisores de um número:
-    n, X = divisores(numero)
-    # Se o número de divisores for zero (o número decomposto é o zero):
-    if not n:
-        # Retorna lista vazia:
-        return X
-    # Se o número de divisores for um (o número decomposto é o um):
-    if n == 1:
-        # Retorna dupla do único divisor:
-        return [X[0], X[0]]
-    # Se o número de divisores for dois (o número decomposto é primo):
-    if n == 2:
-        # Retorna os dois divisores:
-        return [X[0], X[1]]
-    # Se o número de divisores for 3 (o número decomposto é um número quadrático):
-    if n == 3:
-        # Retorna dupla do divisor seguinte ao um:
-        return [X[1], X[1]]
-    # Se número de observações for ímpar:
-    if n%2:
-        # Se o tipo de ajuste for à esquerda:
-        if t == 'e':
-            # Retorna a dupla central respectiva ao ajuste:
-            return [X[int(n/2)-1], X[int(n/2)]]
-        # Se o tipo de ajuste for à direita:
-        elif t == 'd':
-            # Retorna a dupla central respectiva ao ajuste:
-            return [X[int(n/2)], X[int(n/2)+1]]
-        else:
-            # Imprime mensagem de erro:
-            print("Erro. O tipo de ajuste deve ser 'e' ou 'd'.")
-            # Encerra o programa:
-            sys.exit()
-    # Senão:
-    else:
-        # Retorna as duas observações centrais:
-        return [X[int(n/2)-1], X[int(n/2)]]
+# dupla_de_fatores_mais_proximos = decomposicao_em_dupla_de_fatores_mais_proximos(numero)
+# imprime_lista(dupla_de_fatores_mais_proximos)

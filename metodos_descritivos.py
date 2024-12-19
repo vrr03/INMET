@@ -12,8 +12,6 @@ import numpy as np
 import geradores_de_sequencias as gseq
 # Importa verificadores como ver:
 import verificadores as ver
-# Importa medidas_de_posicao como mpos: 
-import medidas_de_posicao as mpos
 
 # X: lista ou array de dados no eixo x;
 # Y: lista ou array de dados no eixo y;
@@ -179,7 +177,8 @@ def plota_grafico_de_multiplos_graficos_de_defasagens(n, X, k):
         if k%2:
             # Se k é primo:
             if ver.eh_primo(k):
-                # Pega os dois fatores mais próximos que se multiplicados descrevem k+1:
+                # Pega os dois fatores dos quais o maior deles é o menor possível para ser maior
+                # das possibilidades de pares de fatores que se multiplicados descrevem k+1:
                 f = gseq.decomposicao_em_dupla_de_fatores_mais_proximos(k+1)
                 # print(f"({f[0]}, {f[1]})")
                 # Cria matriz de gráficos:
@@ -216,10 +215,10 @@ def plota_grafico_de_multiplos_graficos_de_defasagens(n, X, k):
                     z += 1
                 # Desativa a exibição da última célula de gráfico:
                 axes[f[0]-1, f[1]-1].axis('off')
-
             # Senão:
             else:
-                # Pega os dois fatores mais próximos que se multiplicados descrevem k:
+                # Pega os dois fatores dos quais o maior deles é o menor possível para ser maior
+                # das possibilidades de pares de fatores que se multiplicados descrevem k:
                 f = gseq.decomposicao_em_dupla_de_fatores_mais_proximos(k)
                 # print(f"({f[0]}, {f[1]})")
                 # Cria matriz de gráficos:
@@ -242,7 +241,8 @@ def plota_grafico_de_multiplos_graficos_de_defasagens(n, X, k):
                         z += 1
         # Senão, se k par:
         else:
-            # Pega os dois fatores mais próximos que se multiplicados descrevem k:
+            # Pega os dois fatores dos quais o maior deles é o menor possível para ser maior
+            # das possibilidades de pares de fatores que se multiplicados descrevem k:
             f = gseq.decomposicao_em_dupla_de_fatores_mais_proximos(k)
             # print(f"({f[0]}, {f[1]})")
             # Cria matriz de gráficos:
@@ -295,7 +295,7 @@ def lista_medias_de_um_atributo_agrupado_pelos_dias_de_um_mes(df, atr_temporal, 
 # df: dataframe a ser analisado;
 # atr_temporal: atributo do tipo date;
 # atr_imagem: atributo a ser analisado.
-def grafico_de_sazonalidade_mensal(df, atr_temporal, atr_imagem):
+def plota_grafico_de_sazonalidade_mensal(df, atr_temporal, atr_imagem):
     # Converte o atributo atr_temporal para o tipo datetime, caso ainda não esteja nesse formato:
     df[atr_temporal] = pd.to_datetime(df[atr_temporal])
     # Seleciona apenas o atributo temporal e o atributo imagem:
@@ -349,7 +349,7 @@ def lista_medias_de_um_atributo_agrupado_pelos_dias_de_um_bimestre(df, atr_tempo
 # df: dataframe a ser analisado;
 # atr_temporal: atributo do tipo date;
 # atr_imagem: atributo a ser analisado;
-def grafico_de_sazonalidade_bimestral(df, atr_temporal, atr_imagem):
+def plota_grafico_de_sazonalidade_bimestral(df, atr_temporal, atr_imagem):
     # Converte o atributo atr_imagem para o tipo datetime, caso ainda não esteja nesse formato:
     df[atr_temporal] = pd.to_datetime(df[atr_temporal])
     # Seleciona apenas o atributo temporal e o atributo imagem:
@@ -401,7 +401,7 @@ def lista_medias_de_um_atributo_agrupado_pelos_dias_de_um_trimestre(df, atr_temp
 # df: dataframe a ser analisado;
 # atr_temporal: atributo do tipo date;
 # atr_imagem: atributo a ser analisado.
-def grafico_de_sazonalidade_trimestral(df, atr_temporal, atr_imagem):
+def plota_grafico_de_sazonalidade_trimestral(df, atr_temporal, atr_imagem):
     # Converte o atributo atr_temporal para o tipo datetime, caso ainda não esteja nesse formato:
     df[atr_temporal] = pd.to_datetime(df[atr_temporal])
     # Seleciona apenas o atributo temporal e o atributo imagem:
@@ -453,7 +453,7 @@ def lista_medias_de_um_atributo_agrupado_pelos_dias_de_um_quadrimestre(df, atr_t
 # df: dataframe a ser analisado;
 # atr_temporal: atributo do tipo date;
 # atr_imagem: atributo a ser analisado.
-def grafico_de_sazonalidade_quadrimestral(df, atr_temporal, atr_imagem):
+def plota_grafico_de_sazonalidade_quadrimestral(df, atr_temporal, atr_imagem):
     # Converte o atributo atr_temporal para o tipo datetime, caso ainda não esteja nesse formato:
     df[atr_temporal] = pd.to_datetime(df[atr_temporal])
     # Seleciona apenas o atributo temporal e o atributo imagem:
@@ -505,7 +505,7 @@ def lista_medias_de_um_atributo_agrupado_pelos_dias_de_um_semestre(df, atr_tempo
 # df: dataframe a ser analisado;
 # atr_temporal: atributo do tipo date;
 # atr_imagem: atributo a ser analisado.
-def grafico_de_sazonalidade_semestral(df, atr_temporal, atr_imagem):
+def plota_grafico_de_sazonalidade_semestral(df, atr_temporal, atr_imagem):
     # Converte o atributo atr_temporal para o tipo datetime, caso ainda não esteja nesse formato:
     df[atr_temporal] = pd.to_datetime(df[atr_temporal])
     # Seleciona apenas o atributo temporal e o atributo imagem:
@@ -556,7 +556,7 @@ def lista_medias_de_um_atributo_agrupado_pelos_dias_de_um_ano(df, atr_temporal, 
 # df: dataframe a ser analisado;
 # atr_temporal: atributo do tipo date;
 # atr_imagem: atributo a ser analisado.
-def grafico_de_sazonalidade_anual(df, atr_temporal, atr_imagem):
+def plota_grafico_de_sazonalidade_anual(df, atr_temporal, atr_imagem):
     # Converte atr_temporal para o tipo datetime, caso ainda não esteja nesse formato:
     df[atr_temporal] = pd.to_datetime(df[atr_temporal])
     # Seleciona apenas o atributo temporal e o atributo imagem:
@@ -656,7 +656,7 @@ def lista_medias_de_um_atributo_agrupado_pelos_dias_de_um_periodo(df, atr_tempor
 # df: dataframe a ser analisado;
 # atr_temporal: atributo do tipo date;
 # atr_imagem: atributo a ser analisado.
-def grafico_de_sazonalidade_geral(df, atr_temporal, atr_imagem):
+def plota_grafico_de_sazonalidade_geral(df, atr_temporal, atr_imagem):
 
     # Converte o atributo atr_temporal para o tipo datetime, caso ainda não esteja nesse formato:
     df[atr_temporal] = pd.to_datetime(df[atr_temporal])
@@ -769,7 +769,7 @@ def lista_medias_de_um_atributo_agrupado_pelos_dias_de_uma_estacao_do_ano(df, at
 # df: dataframe a ser analisado;
 # atr_temporal: atributo do tipo date;
 # atr_imagem: atributo a ser analisado,
-def grafico_de_sazonalidade_de_estacoes_do_ano(df, atr_temporal, atr_imagem):
+def plota_grafico_de_sazonalidade_de_estacoes_do_ano(df, atr_temporal, atr_imagem):
     # Converteo atributo atr_temporal para o tipo datetime, caso ainda não esteja nesse formato:
     df[atr_temporal] = pd.to_datetime(df[atr_temporal])
     # Seleciona apenas o atributo temporal e o atributo imagem:
