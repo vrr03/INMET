@@ -6,8 +6,14 @@ import medidas_de_associacao_entre_variaveis_quantitativas as mava
 import matplotlib.pyplot as plt
 # Importa pandas como pd:
 import pandas as pd
-# Importa o módulo numpy como np
+# Importa numpy como np:
 import numpy as np
+# Importa geradores_de_sequencias como gseq:
+import geradores_de_sequencias as gseq
+# Importa verificadores como ver:
+import verificadores as ver
+# Importa medidas_de_posicao como mpos: 
+import medidas_de_posicao as mpos
 
 # X: lista ou array de dados no eixo x;
 # Y: lista ou array de dados no eixo y;
@@ -118,7 +124,7 @@ def plota_grafico_de_defasagens(n, X, k):
     # plota_grafico_no_tempo(X[:n-k], X[k:], tipo='scatter', titulo=f"Gráfico de Defasagens de Passo {k}", rotulo_de_x="$X_t$", rotulo_de_y=f"$X_{{t-{k}}}$", grade=True, cor='blue')
     # Cria o gráfico:
     plt.scatter(X[:n-k], X[k:], color='blue', s=1, alpha=0.5)
-    # Adicionar linha tracejada na diagonal:
+    # Adiciona linha tracejada na diagonal:
     plt.plot([min(X[:n-k]), max(X[:n-k])], [min(X[k:]), max(X[k:])], linestyle='--', color='red')
     # Adiciona título:
     plt.title(f"Gráfico de Defasagem {k}")
@@ -126,6 +132,141 @@ def plota_grafico_de_defasagens(n, X, k):
     plt.xlabel("$X_t$")
     # Adiciona rótulo ao eixo y:
     plt.ylabel(f"$X_{{t-{k}}}$")
+    # Mostra o gráfico:
+    plt.show()
+
+# n: número de observações;
+# X: vetor de observações;
+# k: distância temporal limite.
+def plota_grafico_de_multiplos_graficos_de_defasagens(n, X, k):
+    # Se número de observações menor ou igual a zero:
+    if n <= 0:
+        # Imprime mensagem de erro:
+        print("Erro. O número de observações deve ser um natural não nulo.\n")
+        # Encerra o programa:
+        sys.exit()
+    # Se a defasagem limite solicitada for negativa ou maior que n-1:
+    if k < 0 or k > n-1:
+        # Imprime mensagem de erro:
+        print("Erro. O passo de defasagem limite deve ser um natural pertencente ao intervalo [0, n-1].\n")
+        # Encerra o programa:
+        sys.exit()
+    # Se k for zero ou um:
+    if not k or k == 1:
+        # Plota gráfico simples de defasagem:
+        plota_grafico_de_defasagens(n, X, k)
+    # Senão, se k for dois:
+    elif k == 2:
+        # Cria vetor de gráficos:
+        fig, axes = plt.subplots(1, 2, figsize=(15, 10))
+        # Para todas as defasagens:
+        for i in range(1, 3):
+           # Cria o gráfico:
+            axes[i-1].scatter(X[:n-i], X[i:], color='blue', s=1, alpha=0.5)
+            # Adiciona linha tracejada na diagonal:
+            axes[i-1].plot([min(X[:n-i]), max(X[:n-i])], [min(X[i:]), max(X[i:])], linestyle='--', color='red')
+            # Adiciona título:
+            axes[i-1].set_title(f"Gráfico de Defasagem {i}")
+            # Adiciona rótulo ao eixo x:
+            axes[i-1].set_xlabel("$X_t$")
+            # Adiciona rótulo ao eixo y:
+            axes[i-1].set_ylabel(f"$X_{{t-{i}}}$")
+    # Senão:
+    else:
+        # Inicia indicador de tamanho de passo:
+        z = 1
+        # Se k for ímpar:
+        if k%2:
+            # Se k é primo:
+            if ver.eh_primo(k):
+                # Pega os dois fatores mais próximos que se multiplicados descrevem k+1:
+                f = gseq.decomposicao_em_dupla_de_fatores_mais_proximos(k+1)
+                # print(f"({f[0]}, {f[1]})")
+                # Cria matriz de gráficos:
+                fig, axes = plt.subplots(f[0], f[1], figsize=(15, 10))
+                # Para todas as linhas (exceto a última):
+                for i in range(0, f[0]-1):
+                    # Para todas as colunas:
+                    for j in range(0, f[1]):
+                        # Cria o gráfico:
+                        axes[i, j].scatter(X[:n-z], X[z:], color='blue', s=1, alpha=0.5)
+                        # Adiciona linha tracejada na diagonal:
+                        axes[i, j].plot([min(X[:n-z]), max(X[:n-z])], [min(X[z:]), max(X[z:])], linestyle='--', color='red')
+                        # Adiciona título:
+                        axes[i, j].set_title(f"Gráfico de Defasagem {z}")
+                        # Adiciona rótulo ao eixo x:
+                        axes[i, j].set_xlabel("$X_t$")
+                        # Adiciona rótulo ao eixo y:
+                        axes[i, j].set_ylabel(f"$X_{{t-{z}}}$")
+                        # Aumenta o passo:
+                        z += 1
+                # Para todas as colunas (exceto a última) da última linha:
+                for j in range(0, f[1]-1):
+                    # Cria o gráfico:
+                    axes[f[0]-1, j].scatter(X[:n-z], X[z:], color='blue', s=1, alpha=0.5)
+                    # Adiciona linha tracejada na diagonal:
+                    axes[f[0]-1, j].plot([min(X[:n-z]), max(X[:n-z])], [min(X[z:]), max(X[z:])], linestyle='--', color='red')
+                    # Adiciona título:
+                    axes[f[0]-1, j].set_title(f"Gráfico de Defasagem {z}")
+                    # Adiciona rótulo ao eixo x:
+                    axes[f[0]-1, j].set_xlabel("$X_t$")
+                    # Adiciona rótulo ao eixo y:
+                    axes[f[0]-1, j].set_ylabel(f"$X_{{t-{z}}}$")
+                    # Aumenta o passo:
+                    z += 1
+                # Desativa a exibição da última célula de gráfico:
+                axes[f[0]-1, f[1]-1].axis('off')
+
+            # Senão:
+            else:
+                # Pega os dois fatores mais próximos que se multiplicados descrevem k:
+                f = gseq.decomposicao_em_dupla_de_fatores_mais_proximos(k)
+                # print(f"({f[0]}, {f[1]})")
+                # Cria matriz de gráficos:
+                fig, axes = plt.subplots(f[0], f[1], figsize=(15, 10))
+                # Para todas as linhas:
+                for i in range(0, f[0]):
+                    # Para todas as colunas:
+                    for j in range(0, f[1]):
+                        # Cria o gráfico:
+                        axes[i, j].scatter(X[:n-z], X[z:], color='blue', s=1, alpha=0.5)
+                        # Adiciona linha tracejada na diagonal:
+                        axes[i, j].plot([min(X[:n-z]), max(X[:n-z])], [min(X[z:]), max(X[z:])], linestyle='--', color='red')
+                        # Adiciona título:
+                        axes[i, j].set_title(f"Gráfico de Defasagem {z}")
+                        # Adiciona rótulo ao eixo x:
+                        axes[i, j].set_xlabel("$X_t$")
+                        # Adiciona rótulo ao eixo y:
+                        axes[i, j].set_ylabel(f"$X_{{t-{z}}}$")
+                        # Aumenta o passo:
+                        z += 1
+        # Senão, se k par:
+        else:
+            # Pega os dois fatores mais próximos que se multiplicados descrevem k:
+            f = gseq.decomposicao_em_dupla_de_fatores_mais_proximos(k)
+            # print(f"({f[0]}, {f[1]})")
+            # Cria matriz de gráficos:
+            fig, axes = plt.subplots(f[0], f[1], figsize=(15, 10))
+            # Para todas as linhas:
+            for i in range(0, f[0]):
+                # Para todas as colunas:
+                for j in range(0, f[1]):
+                    # Cria o gráfico:
+                    axes[i, j].scatter(X[:n-z], X[z:], color='blue', s=1, alpha=0.5)
+                    # Adiciona linha tracejada na diagonal:
+                    axes[i, j].plot([min(X[:n-z]), max(X[:n-z])], [min(X[z:]), max(X[z:])], linestyle='--', color='red')
+                    # Adiciona título:
+                    axes[i, j].set_title(f"Gráfico de Defasagem {z}")
+                    # Adiciona rótulo ao eixo x:
+                    axes[i, j].set_xlabel("$X_t$")
+                    # Adiciona rótulo ao eixo y:
+                    axes[i, j].set_ylabel(f"$X_{{t-{z}}}$")
+                    # Aumenta o passo:
+                    z += 1
+
+    # Ajusta layout para evitar sobreposição de labels:
+    plt.tight_layout()
+
     # Mostra o gráfico:
     plt.show()
 
@@ -656,3 +797,24 @@ def grafico_de_sazonalidade_de_estacoes_do_ano(df, atr_temporal, atr_imagem):
     plt.legend()
     # Mostrar o gráfico:
     plt.show()
+
+# df: dataframe a ser analisado;
+# atr_temporal: atributo do tipo date;
+# atr_imagem: atributo a ser analisado,
+def lista_medias_de_um_atributo_agrupado_pelos_dias(df, atr_temporal, atr_imagem):
+    # Agrupa as tuplas pelos dias e calcula a média do atributo para cada grupo:
+    media_por_dia = df.groupby(atr_temporal)[atr_imagem].mean()
+    # Ordena as médias pelos dias em ordem crescente:
+    media_por_dia_ordenada = media_por_dia.sort_index()
+    # Retorna lista de tuplas (dia, média):
+    return list(media_por_dia_ordenada.items())
+
+# df: dataframe a ser analisado;
+# atr_temporal: atributo do tipo date;
+# atr_imagem: atributo a ser analisado;
+# tt: título fdo gráfico;
+# ry: rótulo de y;
+def plota_grafico_no_tempo_sumarizado_por_dia(df, atr_temporal, atr_imagem, tt, ry):
+  # Lista as médias dos grupos de valores do atributo imagem agrupados por cada data do período:
+  periodo = lista_medias_de_um_atributo_agrupado_pelos_dias(df, atr_temporal, atr_imagem)
+  plota_grafico_no_tempo([P[0] for P in periodo], [P[1] for P in periodo], titulo=tt, rotulo_de_y=ry)

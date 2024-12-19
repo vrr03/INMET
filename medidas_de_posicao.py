@@ -124,11 +124,11 @@ def mediana(n, X):
     # Se n ímpar:
     if n%2:
         # Retorna a observação no centro da sequência:
-        return X[int((n+1)/2)]
+        return X[int(n/2)]
     # Senão, se n par:
     else:
         # Retorna a média aritmética entre as duas observações centrais:
-        return ((X[int(n/2)] + X[int(n/2)+1])/2)
+        return ((X[int(n/2)-1] + X[int(n/2)])/2)
 
 import sys
 
