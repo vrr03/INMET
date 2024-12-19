@@ -108,7 +108,7 @@ def decomposicao_em_dupla_de_fatores_mais_proximos(numero):
     if not n:
         # Retorna lista vazia:
         return X
-    # Se número de observações for ímpar:
+    # Se o número de divisores for ímpar:
     if n%2:
         # Retorna dupla do divisor central:
         return [X[int(n/2)], X[int(n/2)]]
