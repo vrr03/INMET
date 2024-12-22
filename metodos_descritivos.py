@@ -542,10 +542,10 @@ def gerar_lista_de_cores(n):
 # df: dataframe a ser analisado;
 # atr_temporal: atributo do tipo date;
 # atr_imagem: atributo a ser analisado;
-# a: ano a ser analisado.
-def lista_medias_de_um_atributo_agrupado_pelos_dias_de_um_ano(df, atr_temporal, atr_imagem, a):
+# ano: ano a ser analisado.
+def lista_medias_de_um_atributo_agrupado_pelos_dias_de_um_ano(df, atr_temporal, atr_imagem, ano):
     # Filtra as tuplas onde a data pertence ao ano t:
-    df_filtrado = df[(df[atr_temporal].dt.year == a)].copy()
+    df_filtrado = df[(df[atr_temporal].dt.year == ano)].copy()
     # Agrupa as tuplas filtradas pelos dias e calcula a média do atributo para cada grupo:
     media_por_dia = df_filtrado.groupby(atr_temporal)[atr_imagem].mean()
     # Ordena as médias do ano em ordem crescente:
@@ -589,8 +589,8 @@ def plota_grafico_de_sazonalidade_anual(df, atr_temporal, atr_imagem):
 # atr_imagem: atributo a ser analisado;
 # p: tipo de subperíodo de um ano a ser analisado;
 # t: índice do subperíodo;
-# a: ano a ser analisado (se p == 12 & t == 1).
-def lista_medias_de_um_atributo_agrupado_pelos_dias_de_um_periodo(df, atr_temporal, atr_imagem, p, t, a):
+# ano: ano a ser analisado (se p == 12 & t == 1).
+def lista_medias_de_um_atributo_agrupado_pelos_dias_de_um_periodo(df, atr_temporal, atr_imagem, p, t, ano):
     
     # Se tipo de subperíodo inválido:
     if p < 1 or p > 12:
@@ -636,7 +636,7 @@ def lista_medias_de_um_atributo_agrupado_pelos_dias_de_um_periodo(df, atr_tempor
     # Se sazonalidade anual:
     elif p == 12:
       # Filtra as tuplas onde a data pertence ao ano t:
-      df_filtrado = df[(df[atr_temporal].dt.year == a)].copy()
+      df_filtrado = df[(df[atr_temporal].dt.year == ano)].copy()
       # Agrupa as tuplas filtradas pelos dias e calcula a média do atributo para cada grupo:
       media_por_dia = df_filtrado.groupby(atr_temporal)[atr_imagem].mean()
     # Senão, se sazonalidade bimestral ou trimestral ou quadrimestral ou semestral:
